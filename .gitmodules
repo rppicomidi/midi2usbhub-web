@@ -1,0 +1,27 @@
+[submodule "ext_lib/embedded-cli"]
+	path = ext_lib/embedded-cli
+	url = https://github.com/funbiscuit/embedded-cli.git
+[submodule "ext_lib/littlefs-lib"]
+	path = ext_lib/littlefs-lib
+	url = https://github.com/rppicomidi/littlefs-lib.git
+[submodule "ext_lib/parson"]
+	path = ext_lib/parson
+	url = https://github.com/kgabis/parson.git
+[submodule "lib/pico-c-utilities"]
+	path = lib/pico-c-utilities
+	url = https://github.com/rppicomidi/pico-c-utilities.git
+[submodule "lib/pico-mono-ui-lib"]
+	path = lib/pico-mono-ui-lib
+	url = https://github.com/rppicomidi/pico-mono-ui-lib.git
+[submodule "lib/pico-ssd1306-mono-graphics-lib"]
+	path = lib/pico-ssd1306-mono-graphics-lib
+	url = https://github.com/rppicomidi/pico-ssd1306-mono-graphics-lib.git
+[submodule "lib/pico-w-connection-manager"]
+	path = lib/pico-w-connection-manager
+	url = https://github.com/rppicomidi/pico-w-connection-manager.git
+[submodule "lib/pio_midi_uart_lib"]
+	path = lib/pio_midi_uart_lib
+	url = https://github.com/rppicomidi/pio_midi_uart_lib.git
+[submodule "lib/ring_buffer_lib"]
+	path = lib/ring_buffer_lib
+	url = https://github.com/rppicomidi/ring_buffer_lib.git
