@@ -55,7 +55,25 @@ rppicomidi::Preset_manager_cli::Preset_manager_cli(EmbeddedCli* cli, Preset_mana
         pm,
         static_fatfs_restore
     }));
+    assert(embeddedCliAddBinding(cli, {
+        "save-screenshots",
+        "saves screenshots already stored internally to flash",
+        false,
+        pm,
+        static_fatfs_save_screenshots
+    }));
 }
+
+void rppicomidi::Preset_manager_cli::static_fatfs_save_screenshots(EmbeddedCli* cli, char* args, void* context)
+{
+    (void)cli;
+    (void)args;
+    FRESULT res = reinterpret_cast<Preset_manager*>(context)->export_all_screenshots();
+    if (res != FR_OK) {
+        printf("error %u saving screenshots\r\n", res);
+    }
+}
+
 
 void rppicomidi::Preset_manager_cli::static_save_current_preset(EmbeddedCli* cli, char* args, void* context)
 {

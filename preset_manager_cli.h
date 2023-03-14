@@ -36,14 +36,14 @@ public:
     void operator=(Preset_manager_cli const&) = delete;
     ~Preset_manager_cli()=default;
     Preset_manager_cli(EmbeddedCli* cli, Preset_manager* pm);
-    static uint16_t get_num_commands() { return 4; }
+    static uint16_t get_num_commands() { return 5; }
 private:
     // CLI Commands
     static void static_save_current_preset(EmbeddedCli* cli, char* args, void*);
     static void static_load_preset(EmbeddedCli* cli, char* args, void*);
     static void static_fatfs_backup(EmbeddedCli *cli, char *args, void *context);
     static void static_fatfs_restore(EmbeddedCli* cli, char* args, void*);
-
+    static void static_fatfs_save_screenshots(EmbeddedCli* cli, char* args, void*);
     // data
     EmbeddedCli* cli;
 };
