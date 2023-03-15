@@ -129,12 +129,24 @@ git fetch origin pull/1627/head:pr-midihost
 ```
 git checkout pr-midihost
 ```
+## Use the latest pico-sdk
+The Wi-Fi support code is in early days and is changing rapdily. Make sure the very
+latest pico-sdk code found in the `develop` branch is in the pico-sdk directory,
+which I assume is in `${PICO_SDK_PATH}`.
+```
+cd ${PICO_SDK_PATH}
+git checkout -b develop origin/develop
+git pull
+git submodule update lib/lwip
+git submodule update lib/cyw43-driver
+```
+
 ## Get the project code
 Clone the midiusb2hub project to a directory at the same level as the pico-sdk directory.
 
 ```
-cd [one directory above the pico-sdk directory]
-git clone --recurse-submodules https://github.com/rppicomidi/midi2usbhub.git
+cd cd ${PICO_SDK_PATH}/..
+git clone --recurse-submodules https://github.com/rppicomidi/midi2usbhub-web.git
 ```
 
 ## Command Line Build (skip if you want to use Visual Studio Code)
@@ -145,7 +157,7 @@ and the midid2usbhub-web project in the ${PICO_MIDI_PROJECTS} directory)
 ```
 export PICO_BOARD=pico_w
 export PICO_SDK_PATH=${PICO_MIDI_PROJECTS}/pico-sdk/
-cd ${PICO_MIDI_PROJECTS}/midi2usbhub
+cd ${PICO_MIDI_PROJECTS}/midi2usbhub-web
 mkdir build
 cd build
 cmake ..
