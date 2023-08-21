@@ -32,7 +32,7 @@
 #include <cstdint>
 #include <string>
 #include "tusb.h"
-#include "class/midi/midi_host.h"
+#include "usb_midi_host.h"
 #include "embedded_cli.h"
 #include "parson.h"
 #include "preset_manager.h"
@@ -66,7 +66,6 @@ public:
     Midi2usbhub(Midi2usbhub const &) = delete;
     void operator=(Midi2usbhub const &) = delete;
     void blink_led();
-    void poll_usb_rx();
     void flush_usb_tx();
     void poll_midi_uart_rx(uint8_t port_num);
     /**

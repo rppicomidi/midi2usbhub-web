@@ -102,45 +102,14 @@ Please test everything carefully before you connect this to your expensive MIDI 
 moderately expensive USB hub.
 
 # Setting Up Your Build and Debug Environment
-I am running Ubuntu Linux 20.04LTS on an old PC. I have Visual Studio Code (VS Code)
+I am running Ubuntu Linux 22.04LTS on an old PC. I have Visual Studio Code (VS Code)
 installed and went
 through the tutorial in Chapter 7 or [Getting started with Raspberry Pi Pico](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf) to make sure it was working
 first. I use a picoprobe for debugging, so I have openocd running in a terminal window.
 I use minicom for the serial port terminal (make sure your linux account is in the dialup
 group).
 
-## Using a tinyusb library that supports USB MIDI Host
-The Pico SDK uses the main repository for tinyusb as a git submodule. Until the USB Host driver for MIDI is
-incorporated in the main repository for tinyusb, you will need to use the latest development version in pull
-request 1627 forked version. To make matters worse, this pull request is getting old and it is rapidly
-diverging from the mainline of tinyusb, so I have been updating this pull request in my local workspace. I
-have pushed my changes up to my own fork of tinyusb that I keep in a branch called pr-midihost. Sorry. I know. Yuk.
-
-Here is how you can get my code.
-
-1. If you have not already done so, follow the instructions for installing the Raspberry Pi Pico SDK in Chapter 2 of the 
-[Getting started with Raspberry Pi Pico](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf)
-document. In particular, make sure `PICO_SDK_PATH` is set to the directory where you installed the pico-sdk.
-2. Set the working directory to the tinyusb library
-```
-cd ${PICO_SDK_PATH}/lib/tinyusb
-```
-3. Create a git remote to point to my fork of tinyusb and get my updated branch of Pull Request 1627, which is called pr-midihost (short for pull-request-midihost)
-```
-git remote add rppicomidi https://github.com/rppicomidi/tinyusb.git
-git fetch rppicomidi
-```
-4. Checkout the appropriate branch of my forked code
-```
-git checkout -b pr-midihost rppicomidi/pr-midihost
-```
-5. In case you ever need to get back to the official tinyusb code for some other
-project, just check out the master branch and pull the latest code.
-```
-git checkout master
-git pull
-```
-## Use the latest pico-sdk
+## Use the at least pico-sdk 1.5.1
 The Wi-Fi support code is in early days and is changing rapdily. Make sure the very
 latest pico-sdk code found in the `develop` branch is in the pico-sdk directory,
 which I assume is in `${PICO_SDK_PATH}`.
@@ -150,8 +119,37 @@ git checkout -b develop origin/develop
 git pull
 git submodule update lib/lwip
 git submodule update lib/cyw43-driver
+git submodule update lib/mbedtls
 ```
+## Use a TinyUSB library version that supports application host drivers
+The USB MIDI host driver is currently not part of the TinyUSB stack. It is an
+application host driver found in this project's `lib/usb_midi_host` directory.
+The Pico SDK uses the main repository for TinyUSB as a git submodule. The version
+of TinyUSB that ships with the Pico SDK 1.5.1 does not support application host
+drivers. That feature was added 15-Aug-2023. You will likely need the latest version
+of the TinyUSB library for this code to work correctly. The following describes
+how to make sure your Pico SDK version's TinyUSB library supports application host
+drivers.
 
+1. If you have not already done so, follow the instructions for installing the Raspberry Pi Pico SDK in Chapter 2 of the 
+[Getting started with Raspberry Pi Pico](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf)
+document. In particular, make sure `PICO_SDK_PATH` is set to the directory where you installed the pico-sdk.
+2. Set the working directory to the tinyusb library and make sure you are on the main branch.
+```
+cd ${PICO_SDK_PATH}/lib/tinyusb
+git checkout master
+```
+If you get warnings about directories not being able to be deleted, it is because
+TinyUSB removed a lot of git submodules after 0.15.0. You may safely remove them
+to free up drive space.
+3. Check the date on the last commit to the TinyUSB library master branch.
+```
+git log -1
+```
+4. If the `Date:` is >= 15-Aug-2023, your TinyUSB library should be fine. If not, get the latest
+```
+git pull
+```
 ## Get the project code
 Clone the midiusb2hub project to a directory at the same level as the pico-sdk directory.
 

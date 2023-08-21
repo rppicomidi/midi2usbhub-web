@@ -34,7 +34,7 @@
 #include "pico/stdlib.h"
 #include "pico/binary_info.h"
 #include "pio_midi_uart_lib.h"
-#include "bsp/board.h"
+#include "bsp/board_api.h"
 #include "preset_manager.h"
 #include "diskio.h"
 #include "hid_keyboard.h"
@@ -299,15 +299,6 @@ void rppicomidi::Midi2usbhub::blink_led()
     }
 }
 
-void rppicomidi::Midi2usbhub::poll_usb_rx()
-{
-    for (auto &in_port : midi_in_port_list) {
-        // poll each connected MIDI IN port only once per device address
-        if (in_port->devaddr != uart_devaddr && in_port->cable == 0 && tuh_midi_configured(in_port->devaddr))
-            tuh_midi_read_poll(in_port->devaddr);
-    }
-}
-
 void rppicomidi::Midi2usbhub::flush_usb_tx()
 {
     for (auto &out_port : midi_out_port_list)
@@ -480,7 +471,6 @@ void rppicomidi::Midi2usbhub::task()
         poll_midi_uart_rx(port);
     }
     flush_usb_tx();
-    poll_usb_rx();
     for (uint8_t port=0; port < num_midi_uarts; port++) {
         pio_midi_uart_drain_tx_buffer(midi_uarts[port]);
     }
