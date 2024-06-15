@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  */
+#ifndef RPPICOMIDI_NO_LCD
 #include <cstring>
 #include <cstdio>
 #include "home_screen.h"
@@ -224,3 +225,4 @@ void rppicomidi::Home_screen::preset_chooser_cb(View* context_, int idx)
     if (idx >=0 && idx < (int)me->presets.size())
         me->pm->load_preset(me->presets.at(idx)+".json");
 }
+#endif

@@ -38,13 +38,13 @@
 #include "preset_manager.h"
 #include "pico_w_connection_manager.h"
 #include "midi2usbhub_cli.h"
-
+#ifndef RPPICOMIDI_NO_LCD
 #include "mono_graphics_lib.h"
 #include "ssd1306i2c.h"
 #include "ssd1306.h"
 #include "view_manager.h"
 #include "home_screen.h"
-
+#endif
 namespace rppicomidi
 {
 class Midi2usbhub
@@ -305,6 +305,7 @@ private:
     Midi2usbhub_cli cli;
     std::string json_connected_state;
     std::string json_current_settings;
+#ifndef RPPICOMIDI_NO_LCD
     const uint8_t OLED_ADDR=0x3c;   // the OLED I2C address as a constant
     uint8_t addr[1];                // the OLED I2C address is stored here
     const uint8_t MUX_ADDR=0;       // no I2C mux
@@ -324,5 +325,6 @@ private:
         render_done_mask |= (1u << display_num);
     }
     Home_screen home_screen;
+#endif
 };
 }

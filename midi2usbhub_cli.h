@@ -73,8 +73,10 @@ private:
     static void static_show(EmbeddedCli *, char *, void *);
     static void static_reset(EmbeddedCli *, char *, void *);
     static void static_rename(EmbeddedCli *, char *, void *);
+#ifndef RPPICOMIDI_NO_LCD
     static void static_screenshot(EmbeddedCli *, char *, void *);
     static void static_export_all_screenshots(EmbeddedCli *, char *, void *);
+#endif
     // data
     EmbeddedCli* cli;
 };

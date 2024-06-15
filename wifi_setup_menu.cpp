@@ -22,6 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  */
+#ifndef RPPICOMIDI_NO_LCD
 #include <cstring>
 #include <cstdio>
 #include "wifi_setup_menu.h"
@@ -152,3 +153,4 @@ void rppicomidi::Wifi_setup_menu::forget_ssid_cb(View* view, int selected_idx)
     }
 
 }
+#endif

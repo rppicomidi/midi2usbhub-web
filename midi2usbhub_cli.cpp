@@ -79,6 +79,7 @@ rppicomidi::Midi2usbhub_cli::Midi2usbhub_cli(Preset_manager* pm, Pico_w_connecti
                                        false,
                                        this,
                                        static_show}));
+#ifndef RPPICOMIDI_NO_LCD
     assert(embeddedCliAddBinding(cli, {"screenshot",
                                        "take a screenshot of the current OLED screen",
                                        false,
@@ -89,6 +90,7 @@ rppicomidi::Midi2usbhub_cli::Midi2usbhub_cli(Preset_manager* pm, Pico_w_connecti
                                        false,
                                        this,
                                        static_export_all_screenshots}));
+#endif
     Preset_manager_cli pm_cli(cli, pm);
     Pico_lfs_cli lfs_cli(cli);
     Pico_fatfs_cli fatfs_cli(cli);
@@ -281,7 +283,7 @@ void rppicomidi::Midi2usbhub_cli::static_rename(EmbeddedCli *cli, char *args, vo
     }
 }
 
-
+#ifndef RPPICOMIDI_NO_LCD
 void rppicomidi::Midi2usbhub_cli::static_screenshot(EmbeddedCli*, char*, void*)
 {
     Midi2usbhub::instance().screenshot();
@@ -298,3 +300,4 @@ void rppicomidi::Midi2usbhub_cli::static_export_all_screenshots(EmbeddedCli *, c
         printf("Failed\r\n");
     }
 }
+#endif

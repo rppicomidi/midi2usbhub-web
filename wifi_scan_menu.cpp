@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  */
-
+#ifndef RPPICOMIDI_NO_LCD
 #include "wifi_scan_menu.h"
 
 rppicomidi::Wifi_scan_menu::Wifi_scan_menu(Mono_graphics& screen_, Pico_w_connection_manager* wifi_, View_manager* vm_) :
@@ -212,3 +212,4 @@ void rppicomidi::Wifi_scan_menu::on_decrement(uint32_t delta, bool is_shifted)
         draw();
     }
 }
+#endif

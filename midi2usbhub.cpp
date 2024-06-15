@@ -37,14 +37,18 @@
 #include "bsp/board_api.h"
 #include "preset_manager.h"
 #include "diskio.h"
+#ifndef RPPICOMIDI_NO_LCD
 #include "hid_keyboard.h"
+#endif
 #ifdef RPPICOMIDI_PICO_W
 #include "lwip/apps/httpd.h"
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/fs.h"
 #include "main_lwipopts.h"
 #endif
+#ifndef RPPICOMIDI_NO_LCD
 uint16_t rppicomidi::Midi2usbhub::render_done_mask = 0;
+#endif
 
 JSON_Value* rppicomidi::Midi2usbhub::serialize_to_json()
 {
@@ -336,10 +340,12 @@ void rppicomidi::Midi2usbhub::poll_midi_uart_rx(uint8_t port)
     }
 }
 
-rppicomidi::Midi2usbhub::Midi2usbhub() : current_connection{nullptr}, cli{&preset_manager, &wifi}, 
-    addr{OLED_ADDR},
+rppicomidi::Midi2usbhub::Midi2usbhub() : current_connection{nullptr}, cli{&preset_manager, &wifi}
+#ifndef RPPICOMIDI_NO_LCD
+    , addr{OLED_ADDR},
     ssd1306{&i2c_driver_oled, 0, Ssd1306::Com_pin_cfg::ALT_DIS, 128, 64, 0, 0}, // set up the SSD1306 to drive at 128 x 64 oled
     oled_screen{&ssd1306, Display_rotation::Landscape180}, home_screen{oled_screen, &wifi, &preset_manager, &oled_view_manager}
+#endif
 {
     bi_decl(bi_program_description("Provide a USB host interface for Serial Port MIDI."));
     bi_decl(bi_1pin_with_name(LED_GPIO, "On-board LED"));
@@ -386,7 +392,7 @@ rppicomidi::Midi2usbhub::Midi2usbhub() : current_connection{nullptr}, cli{&prese
     attached_devices[uart_devaddr].rx_cables = num_midi_uarts;
     attached_devices[uart_devaddr].tx_cables = num_midi_uarts;
     attached_devices[uart_devaddr].configured = true;
-
+#ifndef RPPICOMIDI_NO_LCD
     render_done_mask = 0;
     int num_displays = 1;
     uint16_t target_done_mask = (1<<(num_displays)) -1;
@@ -400,6 +406,7 @@ rppicomidi::Midi2usbhub::Midi2usbhub() : current_connection{nullptr}, cli{&prese
     }
     assert(success);
     Hid_keyboard::instance().set_view_manager(&oled_view_manager);
+#endif
     printf("Cli is running.\r\n");
     printf("Type \"help\" for a list of commands\r\n");
     printf("Use backspace and tab to remove chars and autocomplete\r\n");
@@ -479,10 +486,12 @@ void rppicomidi::Midi2usbhub::task()
     process_pending_cmds();
 #endif
     cli.task();
+#ifndef RPPICOMIDI_NO_LCD
     if (oled_screen.can_render()) {
         oled_screen.render_non_blocking(nullptr, 0);
     }
     oled_screen.task();
+#endif
 }
 
 void rppicomidi::Midi2usbhub::get_connected()
@@ -494,10 +503,12 @@ void rppicomidi::Midi2usbhub::get_connected()
         wifi.get_current_ssid(ssid);
         if (ssid.size() > 0) {
             wifi.autoconnect();
+#ifndef RPPICOMIDI_NO_LCD
             if (oled_view_manager.get_current_view() == &home_screen) {
                 home_screen.update_ipaddr_menu_item();
                 home_screen.draw();
             }
+#endif
         }
     }
     while (!connected) {
@@ -864,6 +875,7 @@ void rppicomidi::Midi2usbhub::process_pending_cmds()
     unprotect_from_lwip();
 }
 
+#ifndef RPPICOMIDI_NO_LCD
 void rppicomidi::Midi2usbhub::screenshot()
 {
     int nbytes = oled_screen.get_bmp_file_data_size();
@@ -872,9 +884,8 @@ void rppicomidi::Midi2usbhub::screenshot()
         preset_manager.save_screenshot(bmp, nbytes);
         delete[] bmp;
     }
-
 }
-
+#endif
 //--------------------------------------------------------------------+
 // TinyUSB Callbacks
 //--------------------------------------------------------------------+

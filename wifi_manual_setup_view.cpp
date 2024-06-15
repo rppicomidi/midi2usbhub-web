@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#ifndef RPPICOMIDI_NO_LCD
 #include "wifi_manual_setup_view.h"
 
 rppicomidi::Wifi_manual_setup_view::Wifi_manual_setup_view(Mono_graphics& screen_, Pico_w_connection_manager* wifi_, View_manager* vm_) :
@@ -240,3 +241,4 @@ void rppicomidi::Wifi_manual_setup_view::draw()
         ssid.draw();
     }
 }
+#endif
