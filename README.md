@@ -12,10 +12,11 @@ This project uses a Pico W board, a micro USB to USB A adapter, and a powered US
 to run software that routes MIDI data among all the devices connected to the hub.
 There are 2 UART DIN MIDI INs and 2 UART DIN MIDI OUTs, so you can connect
 to old school MIDI too. You can route the UART MIDI the same way your route USB MIDI.
-You configure the routing with and embedded web server. You use a 128x64 OLED and USB
+You configure the routing with an embedded web server. You can use a 128x64 OLED and USB
 keyboard connected to the USB hub to manage the Wi-Fi connection. You can also use
 command line interpreter (CLI) commands through a serial port terminal to manage Wi-Fi
-connection and MIDI routing.
+connection and MIDI routing. If you only want to use the CLI, you can omit the
+OLED, but you have to change the software configuration
 
 The software uses some of the Pico W board's program flash for a file system
 to store configurations in presets. If you save your settings to a preset, then
@@ -35,17 +36,12 @@ even if the Wi-Fi provides no connection to the Internet, so no relying
 on styles, fonts or other content pulled from from the Web. The other goal is
 to have everything you need on one page so you don't have to go digging.
 
-# Project Status
-## 13-Mar-2023
-Moved code over from the midi2usbhub project and updated documentation.
-
-
 # Hardware
 ## Bill of Materials
 - Pico W Board
 - USB A female breakout board
 - USB C female breakout board
-- SSD1306-based 128x64 OLED display module
+- SSD1306-based 128x64 OLED display module (optional)
 - 4x 5 pin DIN female MIDI connectors
 - 2x Sharp PC900V or H11L1-type optoisolators
 - 2x 470ohm 1/4W resistors
@@ -157,6 +153,16 @@ Clone the midiusb2hub project to a directory at the same level as the pico-sdk d
 cd cd ${PICO_SDK_PATH}/..
 git clone --recurse-submodules https://github.com/rppicomidi/midi2usbhub-web.git
 ```
+## Configuration if you choose to omit the OLED
+In the file `CMakeLists.txt`, you will find the lines
+```
+target_compile_definitions(${target_proj} PRIVATE
+  RPPICOMIDI_PICO_W
+#  Uncomment the definition of RPPICOMIDI_NO_LCD to use this project with no OLED
+#  RPPICOMIDI_NO_LCD
+)
+```
+Delete the `#` character next to the `RPPICOMIDI_NO_LCD` option and rebuild.
 
 ## Command Line Build (skip if you want to use Visual Studio Code)
 
