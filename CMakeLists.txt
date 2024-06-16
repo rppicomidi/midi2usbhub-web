@@ -72,7 +72,8 @@ set_property(SOURCE ${PICO_SDK_PATH}/lib/lwip/src/apps/http/fs.c APPEND PROPERTY
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/pico-w-connection-manager)
 target_compile_definitions(${target_proj} PRIVATE
   RPPICOMIDI_PICO_W
-  RPPICOMIDI_NO_LCD
+#  Uncomment the definition of RPPICOMIDI_NO_LCD to use this project with no OLED
+#  RPPICOMIDI_NO_LCD
 )
 target_link_libraries(${target_proj} pico_w_connection_manager pico_lwip_http)
 target_include_directories(${target_proj} PRIVATE
